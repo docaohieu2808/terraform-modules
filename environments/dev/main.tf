@@ -55,6 +55,10 @@ module "compute" {
   startup_script = var.startup_script
 
   enable_public_ip = true
+
+  metadata = {
+    ssh-keys = var.ssh_public_key
+  }
 }
 
 # ── GCS State Bucket (bootstrap) ──────────────────────────────────────────────

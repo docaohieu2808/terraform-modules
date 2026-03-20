@@ -56,3 +56,7 @@ variable "startup_script" {
   type        = string
   default     = ""
 }
+variable "ssh_public_key" {
+  type    = string
+  default = ""
+}

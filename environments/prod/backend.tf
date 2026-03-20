@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "devops-pipeline-481120-tfstate"
+    bucket = "iac-devops-484714-tfstate"
     prefix = "environments/prod"
   }
 }
