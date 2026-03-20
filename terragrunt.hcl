@@ -2,9 +2,9 @@
 # Each environment's terragrunt.hcl should include this file via find_in_parent_folders()
 
 locals {
-  project_id      = "devops-pipeline-481120"
+  project_id      = "iac-devops-484714"
   region          = "us-central1"
-  credentials     = "/home/hieudc/terraform/service-account.json"
+  credentials     = "/home/hieudc/iac-devops-terraform.json"
   tfstate_bucket  = "${local.project_id}-tfstate"
 
   # Derive environment name from directory structure: environments/<env>/
@@ -31,28 +31,8 @@ remote_state {
   }
 }
 
-# Generate provider configuration for all environments
-generate "provider" {
-  path      = "provider_generated.tf"
-  if_exists = "overwrite_terragrunt"
-  contents  = <<EOF
-terraform {
-  required_version = ">= 1.5"
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = ">= 5.0"
-    }
-  }
-}
-
-provider "google" {
-  project     = "${local.project_id}"
-  region      = "${local.region}"
-  credentials = "${local.credentials}"
-}
-EOF
-}
+# Provider config is in each environment's main.tf
+# Terragrunt handles only backend + inputs (DRY)
 
 # Common inputs available to all child modules
 inputs = {
