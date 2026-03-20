@@ -20,5 +20,5 @@ output "bucket_self_link" {
 
 output "website_endpoint" {
   description = "The website endpoint (if static website enabled)"
-  value       = var.enable_website ? google_storage_bucket.this.website_endpoint : null
+  value       = var.enable_website ? "https://storage.googleapis.com/${google_storage_bucket.this.name}" : null
 }

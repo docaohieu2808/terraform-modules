@@ -28,7 +28,6 @@ resource "google_compute_instance" "this" {
     for_each = var.additional_disks
     content {
       source      = google_compute_disk.additional[attached_disk.value.name].self_link
-      auto_delete = attached_disk.value.auto_delete
     }
   }
 
