@@ -6,11 +6,11 @@ include "root" {
 }
 
 inputs = {
-  project_id       = "iac-devops-484714"
+  project_id       = get_env("TF_VAR_project_id", "your-gcp-project")
   region           = "us-central1"
   zone             = "us-central1-a"
   env              = "prod"
-  credentials_file = "/home/hieudc/iac-devops-terraform.json"
+  credentials_file = get_env("GOOGLE_APPLICATION_CREDENTIALS", "")
 
   subnet_cidr   = "10.30.0.0/24"
   gke_pods_cidr = "10.31.0.0/16"

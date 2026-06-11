@@ -2,9 +2,9 @@
 # Each environment's terragrunt.hcl should include this file via find_in_parent_folders()
 
 locals {
-  project_id      = "iac-devops-484714"
-  region          = "us-central1"
-  credentials     = "/home/hieudc/iac-devops-terraform.json"
+  project_id      = get_env("TF_VAR_project_id", "your-gcp-project")
+  region          = get_env("TF_VAR_region", "us-central1")
+  credentials     = get_env("GOOGLE_APPLICATION_CREDENTIALS", "")
   tfstate_bucket  = "${local.project_id}-tfstate"
 
   # Derive environment name from directory structure: environments/<env>/

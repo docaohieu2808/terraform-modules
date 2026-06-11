@@ -6,6 +6,7 @@
 # Terraform variable files that may contain secrets
 *.tfvars
 *.tfvars.json
+!*.tfvars.example
 
 # Terraform working directories
 **/.terraform/
@@ -15,9 +16,14 @@
 crash.log
 crash.*.log
 
-# Terraform plan files
+# Terraform plan files — include both extension-less and extensioned variants
+tfplan
 *.tfplan
 *.plan
+
+# Backup files
+*.bak
+*.backup
 
 # Terragrunt cache
 **/.terragrunt-cache/
