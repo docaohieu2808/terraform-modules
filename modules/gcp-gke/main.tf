@@ -1,8 +1,10 @@
 terraform {
+  required_version = ">= 1.10"
+
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 5.0, < 7.0"
+      version = "~> 8.0"
     }
   }
 }
@@ -16,7 +18,9 @@ resource "google_container_cluster" "this" {
   subnetwork = var.subnetwork != "" ? var.subnetwork : null
 
   # Autopilot mode
-  enable_autopilot = var.enable_autopilot
+  # Must be unset (null) for Standard clusters: the provider rejects remove_default_node_pool
+  # together with any enable_autopilot value, even false.
+  enable_autopilot = var.enable_autopilot ? true : null
 
   # For standard clusters, remove the default node pool and manage separately
   remove_default_node_pool = var.enable_autopilot ? null : true
@@ -88,10 +92,10 @@ resource "google_container_cluster" "this" {
 resource "google_container_node_pool" "this" {
   for_each = var.enable_autopilot ? {} : { for np in var.node_pools : np.name => np }
 
-  project    = var.project_id
-  name       = each.value.name
-  cluster    = google_container_cluster.this.id
-  location   = google_container_cluster.this.location
+  project  = var.project_id
+  name     = each.value.name
+  cluster  = google_container_cluster.this.id
+  location = google_container_cluster.this.location
 
   initial_node_count = each.value.initial_node_count
 

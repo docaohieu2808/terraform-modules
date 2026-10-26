@@ -70,9 +70,9 @@ variable "env_vars" {
 variable "secret_env_vars" {
   description = "Secret Manager secrets to inject as env vars"
   type = list(object({
-    env_var    = string
-    secret     = string
-    version    = optional(string, "latest")
+    env_var = string
+    secret  = string
+    version = optional(string, "latest")
   }))
   default = []
 }

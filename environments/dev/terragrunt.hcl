@@ -1,8 +1,8 @@
 # Level 6: Terragrunt DRY — dev environment
-# Inherits root terragrunt.hcl for backend, provider, and common inputs
+# Inherits root.hcl for backend, provider, and common inputs
 
 include "root" {
-  path = find_in_parent_folders()
+  path = find_in_parent_folders("root.hcl")
 }
 
 inputs = {
@@ -18,5 +18,6 @@ inputs = {
 
   # Restrict SSH to specific ranges (not 0.0.0.0/0) — OPA policy compliant
   ssh_source_ranges = ["10.0.0.0/8", "192.168.0.0/16"]
-  ssh_public_key    = "hieudc:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHsZ8c/qSgMIx8tNfe7vLY4SiQ6uxAFlCF2KbhG2mVWC hieudc@server-2"
+  # Optional, e.g. export TF_VAR_ssh_public_key="alice:ssh-ed25519 AAAA... alice@laptop"
+  ssh_public_key = get_env("TF_VAR_ssh_public_key", "")
 }

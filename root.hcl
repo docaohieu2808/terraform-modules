@@ -1,14 +1,21 @@
 # Root Terragrunt configuration — DRY common settings for all environments
-# Each environment's terragrunt.hcl should include this file via find_in_parent_folders()
+# Each environment's terragrunt.hcl includes this file via find_in_parent_folders("root.hcl")
 
 locals {
-  project_id      = get_env("TF_VAR_project_id", "your-gcp-project")
-  region          = get_env("TF_VAR_region", "us-central1")
-  credentials     = get_env("GOOGLE_APPLICATION_CREDENTIALS", "")
-  tfstate_bucket  = "${local.project_id}-tfstate"
+  project_id     = get_env("TF_VAR_project_id", "your-gcp-project")
+  region         = get_env("TF_VAR_region", "us-central1")
+  credentials    = get_env("GOOGLE_APPLICATION_CREDENTIALS", "")
+  tfstate_bucket = "${local.project_id}-tfstate"
 
   # Derive environment name from directory structure: environments/<env>/
   env = element(split("/", path_relative_to_include()), 1)
+}
+
+# Terragrunt copies the stack it runs into .terragrunt-cache. Point it at the repo
+# root (double slash = copy root, run in the sub-directory) so the relative
+# ../../modules/* sources used by every environment still resolve there.
+terraform {
+  source = "${dirname(find_in_parent_folders("root.hcl"))}//environments/${local.env}"
 }
 
 # Remote state configuration — each environment gets its own prefix

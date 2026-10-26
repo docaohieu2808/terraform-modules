@@ -1,9 +1,9 @@
 terraform {
-  required_version = ">= 1.5"
+  required_version = ">= 1.10"
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 5.0, < 7.0"
+      version = "~> 8.0"
     }
   }
 }
@@ -11,7 +11,7 @@ terraform {
 provider "google" {
   project     = var.project_id
   region      = var.region
-  credentials = var.credentials_file
+  credentials = var.credentials_file != "" ? var.credentials_file : null
 }
 
 # ── Network ────────────────────────────────────────────────────────────────────
@@ -42,7 +42,6 @@ module "compute" {
   source = "../../modules/gcp-compute"
 
   project_id   = var.project_id
-  region       = var.region
   zone         = var.zone
   name         = "${var.env}-app-server"
   machine_type = var.machine_type
@@ -52,6 +51,7 @@ module "compute" {
   subnetwork = module.network.subnet_self_links["${var.env}-subnet-${var.region}"]
 
   tags           = ["ssh", "http-server", "https-server"]
+  labels         = { env = var.env }
   startup_script = var.startup_script
 
   enable_public_ip = true
@@ -70,13 +70,16 @@ module "gke" {
 
   node_pools = [
     {
-      name               = "default-pool"
+      name               = "${var.env}-default-pool"
+      labels             = { env = var.env }
       machine_type       = var.gke_machine_type
       min_node_count     = 1
       max_node_count     = 3
       initial_node_count = 1
     }
   ]
+
+  labels = { env = var.env }
 
   deletion_protection = false
 }

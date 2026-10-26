@@ -1,8 +1,10 @@
 terraform {
+  required_version = ">= 1.10"
+
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 5.0, < 7.0"
+      version = "~> 8.0"
     }
   }
 }
@@ -109,8 +111,8 @@ resource "google_compute_firewall" "custom" {
     }
   }
 
-  source_ranges = each.value.direction == "INGRESS" ? each.value.ranges : []
+  source_ranges      = each.value.direction == "INGRESS" ? each.value.ranges : []
   destination_ranges = each.value.direction == "EGRESS" ? each.value.ranges : []
-  target_tags   = each.value.target_tags
-  source_tags   = each.value.source_tags
+  target_tags        = each.value.target_tags
+  source_tags        = each.value.source_tags
 }

@@ -1,8 +1,10 @@
 terraform {
+  required_version = ">= 1.10"
+
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 5.0, < 7.0"
+      version = "~> 8.0"
     }
   }
 }
@@ -32,9 +34,9 @@ resource "google_storage_bucket" "this" {
         storage_class = lifecycle_rule.value.storage_class
       }
       condition {
-        age                  = lifecycle_rule.value.age_days
-        num_newer_versions   = lifecycle_rule.value.num_newer_versions
-        with_state           = lifecycle_rule.value.with_state
+        age                = lifecycle_rule.value.age_days
+        num_newer_versions = lifecycle_rule.value.num_newer_versions
+        with_state         = lifecycle_rule.value.with_state
       }
     }
   }

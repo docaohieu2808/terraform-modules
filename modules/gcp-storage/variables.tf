@@ -47,11 +47,11 @@ variable "public_access_prevention" {
 variable "lifecycle_rules" {
   description = "Lifecycle rules for object management"
   type = list(object({
-    action_type          = string
-    storage_class        = optional(string)
-    age_days             = optional(number)
-    num_newer_versions   = optional(number)
-    with_state           = optional(string)
+    action_type        = string
+    storage_class      = optional(string)
+    age_days           = optional(number)
+    num_newer_versions = optional(number)
+    with_state         = optional(string)
   }))
   default = []
 }

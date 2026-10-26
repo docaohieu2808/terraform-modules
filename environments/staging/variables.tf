@@ -54,7 +54,7 @@ variable "gke_machine_type" {
 variable "ssh_source_ranges" {
   description = "IP ranges allowed SSH access"
   type        = list(string)
-  default     = ["0.0.0.0/0"]
+  default     = ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
 }
 
 variable "startup_script" {

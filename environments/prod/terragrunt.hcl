@@ -1,8 +1,8 @@
 # Level 6: Terragrunt DRY — prod environment
-# Inherits root terragrunt.hcl for backend, provider, and common inputs
+# Inherits root.hcl for backend, provider, and common inputs
 
 include "root" {
-  path = find_in_parent_folders()
+  path = find_in_parent_folders("root.hcl")
 }
 
 inputs = {
