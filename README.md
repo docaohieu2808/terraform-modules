@@ -35,7 +35,7 @@ Where this tier sits in the whole ladder:
 ```
 levels/                    L1-L3: local-only exercises (no cloud, no credentials)
 modules/                   L4: 6 reusable GCP modules, each with required_version and provider ~> 8.0
-  gcp-network|compute|storage|gke/tests/   terraform test files (mock_provider "google")
+  gcp-*/tests/   (all six modules)   terraform test files (mock_provider "google")
 environments/{dev,staging,prod}/            L5: compose the modules
 root.hcl                   L6: shared Terragrunt config (generated GCS backend, common inputs)
 policy/                    L6: OPA/Rego (rego.v1) policies + policy_test.rego
@@ -127,7 +127,9 @@ terragrunt apply
 
 - Nothing is applied to a real cloud in CI. `terraform apply` of the GCP modules, the state-bucket
   bootstrap and remote state locking need a GCP project and are validated only up to a plan.
-- `gcp-dns` and `gcp-cloud-run` have `validate` coverage but no mocked unit tests yet.
+- All six modules have mocked `terraform test` suites (CI fails if a module has no `tests/`). Writing the
+  Cloud Run tests exposed non-v2 default values for `ingress` and `vpc_egress`; they now default to the
+  v2 API enums and are validated, as are the DNS name and zone visibility.
 - The mocked tests assert configuration the modules control; values the cloud computes (IPs, self links)
   are unknown at plan time and are not asserted.
 - Tool versions are pinned in `ci.yml` (Dependabot updates the actions and the Terraform lock files);

@@ -91,7 +91,10 @@ jobs:
       - name: terraform test (mocked google provider) for the GCP modules
         run: |
           mkdir -p "$TF_PLUGIN_CACHE_DIR"
-          for module in gcp-network gcp-compute gcp-storage gcp-gke; do
+          for dir in modules/*/; do
+            module=$(basename "$dir")
+            # Every module must ship tests: a new module without tests/ fails CI.
+            ls "modules/$module"/tests/*.tftest.hcl >/dev/null
             echo "::group::$module"
             terraform -chdir="modules/$module" init -backend=false -lockfile=readonly >/dev/null
             terraform -chdir="modules/$module" test
