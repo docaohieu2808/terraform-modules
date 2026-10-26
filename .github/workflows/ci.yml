@@ -126,7 +126,7 @@ jobs:
         run: |
           base="https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}"
           curl -sSfLO "$base/conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz"
-          curl -sSfL "$base/checksums.txt" | grep "conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz" | sha256sum -c -
+          curl -sSfL "$base/checksums.txt" | grep " conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz$" | sha256sum -c -
           tar -xzf "conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz" conftest
           sudo install conftest /usr/local/bin/conftest
       - name: opa test (unit tests for every deny rule)
